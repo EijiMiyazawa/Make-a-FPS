@@ -590,6 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26ec7b0ba844525448886e4bff84911c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponAnimator: {fileID: 345581226}
 --- !u!4 &367381161 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4979884215065736, guid: 664956de28ada604d8109484559e4751, type: 3}
