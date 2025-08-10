@@ -6,6 +6,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Enemy
 {
     public class EnemyController : MonoBehaviour, IAttackable
     {
+        [SerializeField] private RagdollSpawner ragdollSpawner;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -21,7 +22,10 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Enemy
         public void Damage(float damage = 0)
         {
             Debug.Log("Damage received: " + damage);
+            ragdollSpawner.SpawnRagdoll();
+            this.gameObject.SetActive(false);
         }
-
+        
+        
     }
 }
