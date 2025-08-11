@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
@@ -8,11 +9,16 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         /// <summary>
         /// 読み取り専用(start時自動割り当て)
         /// </summary>
-        [SerializeField] protected Animator weaponAnimator;
+       protected Animator WeaponAnimator;
 
         /// <summary>
         /// 武器で攻撃
         /// </summary>
         public abstract void Attack(bool isFire = false);
+
+        private void Start()
+        {
+            WeaponAnimator = this.gameObject.GetComponent<Animator>();
+        }
     }
 }

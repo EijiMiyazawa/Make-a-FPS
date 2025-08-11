@@ -30,7 +30,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
                 if (_state == CrowbarState.Idle)
                 {
                     _state = CrowbarState.Attacking;
-                    weaponAnimator.SetTrigger("Attack");
+                    WeaponAnimator.SetTrigger("Attack");
                 }
             }
             else
