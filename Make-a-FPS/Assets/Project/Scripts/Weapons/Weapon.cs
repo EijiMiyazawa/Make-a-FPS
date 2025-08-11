@@ -1,4 +1,5 @@
 using System;
+using foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObject;
 using UnityEngine;
 
 namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
@@ -6,15 +7,19 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
     [RequireComponent(typeof(Animator))]
     public abstract class Weapon : MonoBehaviour
     {
+        [Header("Weapon Data")]
+        [SerializeField] protected WeaponData weaponData;
+        
         /// <summary>
         /// 読み取り専用(start時自動割り当て)
         /// </summary>
-       protected Animator WeaponAnimator;
+        protected Animator WeaponAnimator;
 
         /// <summary>
         /// 武器で攻撃
         /// </summary>
-        public abstract void Attack(bool isFire = false);
+        /// <param name="isFire">入力情報</param>
+        public abstract void Attack(bool isFire);
 
         private void Start()
         {

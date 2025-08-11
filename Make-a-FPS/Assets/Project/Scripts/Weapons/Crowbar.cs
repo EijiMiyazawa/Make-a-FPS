@@ -23,7 +23,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
             _attackCollider.enabled = false;
         }
         
-        public override void Attack(bool isFire = false)
+        public override void Attack(bool isFire)
         {
             if (isFire)
             {
@@ -63,7 +63,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         {
             if (other.TryGetComponent(out IAttackable attackable))
             {
-                attackable.Damage();
+                attackable.Damage(weaponData.Damage);
             }
         }
     }
