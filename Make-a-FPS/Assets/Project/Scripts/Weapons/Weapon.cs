@@ -1,5 +1,5 @@
 using System;
-using foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObject;
+using foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObjectScript;
 using UnityEngine;
 
 namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons

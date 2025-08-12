@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObject
+namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObjectScript
 {
-    [CreateAssetMenu(fileName = "GunData", menuName = "Scriptable Objects/GunData")]
-    public class GunData : WeaponData
+    [CreateAssetMenu(fileName = "NewBulletData", menuName = "Scriptable Objects/BulletData")]
+    public class BulletData : WeaponData
     {
         [Header("射程距離")]
         public float BulletRange = 10f;
@@ -17,7 +17,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObject
         /// <returns></returns>
         public float DamageAtDistance(float bulletDistance)
         {
-            return Damage * BulletPowerDecay.Evaluate(bulletDistance/BulletRange);
+            return WeaponDamage * BulletPowerDecay.Evaluate(bulletDistance/BulletRange);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         private void Start()
         {
             _state = CrowbarState.Idle;
+            WeaponAnimator = this.gameObject.GetComponent<Animator>();
             _attackCollider = GetComponent<Collider>();
             _attackCollider.enabled = false;
         }
@@ -30,7 +31,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
                 if (_state == CrowbarState.Idle)
                 {
                     _state = CrowbarState.Attacking;
-                    WeaponAnimator.SetTrigger("Attack");
+                    //WeaponAnimator.SetTrigger("Attack");
                 }
             }
             else
@@ -63,7 +64,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         {
             if (other.TryGetComponent(out IAttackable attackable))
             {
-                attackable.Damage(weaponData.Damage);
+                attackable.Damage(weaponData.WeaponDamage);
             }
         }
     }
