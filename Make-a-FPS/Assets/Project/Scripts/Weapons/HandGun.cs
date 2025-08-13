@@ -1,3 +1,5 @@
+using foRCreative.App.MakeAFps.Project.Scripts.Inputs;
+using foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObjectScript;
 using UnityEngine;
 
 namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
@@ -38,34 +40,36 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
             _state = HandGunState.Idle;
         }
         
-        public override void Attack(bool isFire)
+        public override void WeaponUseUpdate(MyInputManager input)
         {
-            //  弾丸がない場合は発射しない
-            if(_state == HandGunState.NoAmo) return;
-            
-            if (isFire)
+            switch (_state)
             {
-                if (_state == HandGunState.Idle)
-                {
-                    _state = HandGunState.Firing;
-                    Fire();
-                }
-            }
-            else
-            {
-                _state = HandGunState.Idle;
+                case HandGunState.Idle:
+                    if (input.IsFireDown)
+                    {
+                        Fire();
+                    }
+                    break;
             }
         }
+        
         
         /// <summary>
         /// 弾丸を発射
         /// </summary>
         private void Fire()
         {
-            //  生成して力を加える
-            GameObject bullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
+            //  弾丸オブジェクト複製
+            GameObject obj = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
             
-            if (bullet.TryGetComponent(out Rigidbody rb))
+            //  攻撃力情報を弾丸に付与
+            if (obj.TryGetComponent(out Bullet bullet))
+            {
+                bullet.bulletData = (BulletData)weaponData;
+            }
+            
+            //  弾丸に力を加える
+            if (obj.TryGetComponent(out Rigidbody rb))
             {
                 rb.AddForce(muzzle.forward * bulletSpeed, ForceMode.Impulse);
             }

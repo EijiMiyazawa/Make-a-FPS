@@ -24,9 +24,9 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
             _attackCollider.enabled = false;
         }
         
-        public override void Attack(bool isFire)
+        public override void WeaponUseUpdate(MyInputManager input)
         {
-            if (isFire)
+            if (input.IsFire)
             {
                 if (_state == CrowbarState.Idle)
                 {

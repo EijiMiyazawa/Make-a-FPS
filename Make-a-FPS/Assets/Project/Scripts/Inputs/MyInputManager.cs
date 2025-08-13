@@ -11,10 +11,17 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
         
         //  Moveの入力用
         private Vector2 _moveInput;
+        
         //  Lookの入力用
         private Vector2 _lookInput;
+        
         //  Fireの入力用
         private bool _isFire; 
+        
+        //  FireDownの入力用
+        private bool _isFireDown;
+        //  Fireの前フレームの入力バッファー
+        private bool _isFireBefore;
         
         /// <summary>
         /// 読み取り専用 Moveの入力を返す
@@ -27,13 +34,38 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
         public Vector2 LookInput => _lookInput;
         
         /// <summary>
-        /// 読み取り専用 Fireの入力を返す
+        /// 読み取り専用 Fireが押されているときにTrueを返す
         /// </summary>
         public bool IsFire => _isFire;
+        
+        /// <summary>
+        /// 読み取り専用 Fireが押された瞬間にTrueを返す
+        /// </summary>
+        public bool IsFireDown => _isFireDown;
 
         private void Awake()
         {
             _playerInput = GetComponent<PlayerInput>();
+            _isFireBefore = false;
+        }
+
+        private void Update()
+        {
+            //  Fireの入力がFalseからTrueに変化したときのみIsFireDownをTrueにする
+            if (_isFireBefore == false && _isFire == true)
+            {
+                _isFireDown  = true;
+            }
+            else
+            {
+                _isFireDown  = false;
+            }
+        }
+
+        private void LateUpdate()
+        {
+            //  前フレームの情報を維持
+            _isFireBefore = _isFire;
         }
 
         private void OnEnable()

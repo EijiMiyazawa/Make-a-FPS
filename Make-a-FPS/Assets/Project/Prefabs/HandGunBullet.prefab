@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2acb3fab249c599498a49446e8d79e8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletData: {fileID: 11400000, guid: 88ccdbcfc7e66514f9b2341ec3ffcdf5, type: 2}
+  bulletData: {fileID: 0}
 --- !u!114 &-7615102371262910519
 MonoBehaviour:
   m_ObjectHideFlags: 0
