@@ -1,3 +1,4 @@
+using System.Collections;
 using foRCreative.App.MakeAFps.Project.Scripts.Inputs;
 using foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObjectScript;
 using UnityEngine;
@@ -31,13 +32,20 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         
         [Header("銃口")]
         [SerializeField] private Transform muzzle;
+
+        [Header("連射可能速度")]
+        [SerializeField] private float fireRate = 1f;
         
         //  現在の状態
         private HandGunState _state;
+        
+        private WaitForSeconds _refirerWaitSeconds;
+        
 
         private void Start()
         {
             _state = HandGunState.Idle;
+            _refirerWaitSeconds = new WaitForSeconds(fireRate);
         }
         
         public override void WeaponUseUpdate(MyInputManager input)
@@ -48,11 +56,12 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
                     if (input.IsFireDown)
                     {
                         Fire();
+                        _state = HandGunState.Firing;
+                        StartCoroutine(RefirerCorutine());
                     }
                     break;
             }
         }
-        
         
         /// <summary>
         /// 弾丸を発射
@@ -73,6 +82,12 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
             {
                 rb.AddForce(muzzle.forward * bulletSpeed, ForceMode.Impulse);
             }
+        }
+
+        IEnumerator RefirerCorutine()
+        {
+            yield return _refirerWaitSeconds;
+            _state = HandGunState.Idle;
         }
     }
 }
