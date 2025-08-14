@@ -1353,6 +1353,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: bfd3fa5e-22e6-47af-9c6f-6e6b771a944f
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5ab22e00-95bc-432b-9e73-2f05bde09621
+    m_ActionName: 'Player/Reload[/Keyboard/r,/XInputControllerWindows/buttonWest]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1569,6 +1573,9 @@ MonoBehaviour:
   bulletSpeed: 100
   muzzle: {fileID: 510043003}
   fireRate: 0.11
+  maxAmmo: 10
+  magazine: 0
+  reloadTime: 3
 --- !u!95 &716368488
 Animator:
   serializedVersion: 7

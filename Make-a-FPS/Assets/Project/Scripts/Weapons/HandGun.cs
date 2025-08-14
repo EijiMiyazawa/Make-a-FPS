@@ -20,7 +20,12 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         /// <summary>
         /// 弾丸が装填されていない
         /// </summary>
-        NoAmo = 2
+        NoAmmo = 2,
+        
+        /// <summary>
+        /// リロード動作中
+        /// </summary>
+        Reloading = 3
     }
     public class HandGun : Weapon
     {
@@ -35,18 +40,34 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
 
         [Header("連射可能速度")]
         [SerializeField] private float fireRate = 1f;
+
+        [Header("マガジンの最大弾数")]
+        public int maxAmmo = 10;
+        
+        [Header("マガジン")]
+        public int magazine;
+
+        [Header("リロード時間")] 
+        public int reloadTime = 10;
         
         //  現在の状態
         private HandGunState _state;
         
+        //  発射クールダウンの待ち時間
         private WaitForSeconds _fireWaitSeconds;
-        
+        //  リロード完了待ち時間
+        private WaitForSeconds _reloadWaitSeconds;
 
         private void Start()
         {
-            _state = HandGunState.Idle;
             _fireWaitSeconds = new WaitForSeconds(fireRate);
+            _reloadWaitSeconds = new WaitForSeconds(reloadTime);
+            
             WeaponAnimator = this.gameObject.GetComponent<Animator>();
+            
+            //  初期状態を設定
+            _state = HandGunState.Idle;
+            magazine = maxAmmo;
         }
         
         public override void WeaponUseUpdate(MyInputManager input)
@@ -54,12 +75,34 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
             switch (_state)
             {
                 case HandGunState.Idle:
+                    //  射撃可能
                     if (input.IsFireDown)
                     {
                         Fire();
-                        _state = HandGunState.Firing;
-                        WeaponAnimator.SetTrigger("Attack");
-                        StartCoroutine(FireCoolTimeCoroutine());
+                        //  マガジンが空の場合
+                        if (magazine <= 0)
+                        {
+                            _state = HandGunState.NoAmmo;
+                        }
+                        else
+                        {
+                            _state = HandGunState.Firing;
+                            StartCoroutine(FireCoolTimeCoroutine());
+                        }
+                    }
+                    
+                    //  リロード可能
+                    if (input.IsReloadDown)
+                    {
+                        StartCoroutine(ReloadingCoroutine());
+                    }
+                    
+                    break;
+                case HandGunState.NoAmmo:
+                    //  リロード可能
+                    if (input.IsReloadDown)
+                    {
+                        StartCoroutine(ReloadingCoroutine());
                     }
                     break;
             }
@@ -84,11 +127,31 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
             {
                 rb.AddForce(muzzle.forward * bulletSpeed, ForceMode.Impulse);
             }
+            
+            //  攻撃アニメーションを再生
+            WeaponAnimator.SetTrigger("Attack");
+            
+            //  マガジンの段数を減らす
+            if (magazine > 0)
+            {
+                magazine--;
+            }
         }
-
+        
         IEnumerator FireCoolTimeCoroutine()
         {
             yield return _fireWaitSeconds;
+            _state = HandGunState.Idle;
+        }
+
+        IEnumerator ReloadingCoroutine()
+        {
+            _state = HandGunState.Reloading;
+            WeaponAnimator.SetTrigger("Reload");
+            yield return _reloadWaitSeconds;
+            
+            //  完了後にマガジンを満杯にて射撃準備完了
+            magazine = maxAmmo;
             _state = HandGunState.Idle;
         }
     }

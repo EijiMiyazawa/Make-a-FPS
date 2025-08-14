@@ -16,12 +16,18 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
         private Vector2 _lookInput;
         
         //  Fireの入力用
-        private bool _isFire; 
-        
+        private bool _isFire;
         //  FireDownの入力用
         private bool _isFireDown;
         //  Fireの前フレームの入力バッファー
         private bool _isFireBefore;
+        
+        //  現在のReloadの入力
+        private bool _isReload;
+        //  前フレームのReloadの入力
+        private bool _isReloadBefore;
+        //  ReloadDownの入力用
+        private bool _isReloadDown;
         
         /// <summary>
         /// 読み取り専用 Moveの入力を返す
@@ -42,30 +48,31 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
         /// 読み取り専用 Fireが押された瞬間にTrueを返す
         /// </summary>
         public bool IsFireDown => _isFireDown;
+        
+        /// <summary>
+        /// 読み取り専用 Reloadボタン押下された瞬間にTrueを返す
+        /// </summary>
+        public bool IsReloadDown => _isReloadDown;
 
         private void Awake()
         {
             _playerInput = GetComponent<PlayerInput>();
             _isFireBefore = false;
+            _isReloadBefore = false;
         }
 
         private void Update()
         {
-            //  Fireの入力がFalseからTrueに変化したときのみIsFireDownをTrueにする
-            if (_isFireBefore == false && _isFire == true)
-            {
-                _isFireDown  = true;
-            }
-            else
-            {
-                _isFireDown  = false;
-            }
+            //  前フレームからTrueに変化した場合ボタンを押下した瞬間を検出
+            _isFireDown = (_isFireBefore == false && _isFire == true);
+            _isReloadDown = (_isReloadBefore == false && _isReload == true);
         }
 
         private void LateUpdate()
         {
             //  前フレームの情報を維持
             _isFireBefore = _isFire;
+            _isReloadBefore = _isReload;
         }
 
         private void OnEnable()
@@ -81,10 +88,14 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
             //  Fire
             _playerInput.actions["Fire"].performed += OnFire;
             _playerInput.actions["Fire"].canceled += OnFire;
+            //  Reload
+            _playerInput.actions["Reload"].performed += OnReload;
+            _playerInput.actions["Reload"].canceled += OnReload;
             
             //  カーソルロック
             Cursor.lockState = CursorLockMode.Locked;
         }
+        
 
         private void OnDisable()
         {
@@ -99,6 +110,9 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
             //  Fire
             _playerInput.actions["Fire"].performed -= OnFire;
             _playerInput.actions["Fire"].canceled -= OnFire;
+            //  Reload
+            _playerInput.actions["Reload"].performed -= OnReload;
+            _playerInput.actions["Reload"].canceled -= OnReload;
             
             //  カーソルロック解除
             Cursor.lockState = CursorLockMode.None;
@@ -139,6 +153,19 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
                     break;
                 case InputActionPhase.Canceled:
                     _isFire = false;
+                    break;
+            }
+        }
+        
+        private void OnReload(InputAction.CallbackContext obj)
+        {
+            switch (obj.phase)
+            {
+                case InputActionPhase.Performed:
+                    _isReload = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    _isReload = false;
                     break;
             }
         }
