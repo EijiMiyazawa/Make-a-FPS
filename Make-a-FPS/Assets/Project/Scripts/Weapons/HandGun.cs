@@ -39,13 +39,14 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         //  現在の状態
         private HandGunState _state;
         
-        private WaitForSeconds _refirerWaitSeconds;
+        private WaitForSeconds _fireWaitSeconds;
         
 
         private void Start()
         {
             _state = HandGunState.Idle;
-            _refirerWaitSeconds = new WaitForSeconds(fireRate);
+            _fireWaitSeconds = new WaitForSeconds(fireRate);
+            WeaponAnimator = this.gameObject.GetComponent<Animator>();
         }
         
         public override void WeaponUseUpdate(MyInputManager input)
@@ -57,7 +58,8 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
                     {
                         Fire();
                         _state = HandGunState.Firing;
-                        StartCoroutine(RefirerCorutine());
+                        WeaponAnimator.SetTrigger("Attack");
+                        StartCoroutine(FireCoolTimeCoroutine());
                     }
                     break;
             }
@@ -84,9 +86,9 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
             }
         }
 
-        IEnumerator RefirerCorutine()
+        IEnumerator FireCoolTimeCoroutine()
         {
-            yield return _refirerWaitSeconds;
+            yield return _fireWaitSeconds;
             _state = HandGunState.Idle;
         }
     }

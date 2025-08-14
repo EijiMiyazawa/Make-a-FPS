@@ -21,10 +21,5 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         /// </summary>
         /// <param name="input">入力情報</param>
         public abstract void WeaponUseUpdate(MyInputManager input);
-
-        private void Start()
-        {
-            WeaponAnimator = this.gameObject.GetComponent<Animator>();
-        }
     }
 }
