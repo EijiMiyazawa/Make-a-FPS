@@ -19,18 +19,19 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         private void Start()
         {
             _state = CrowbarState.Idle;
+            WeaponAnimator = this.gameObject.GetComponent<Animator>();
             _attackCollider = GetComponent<Collider>();
             _attackCollider.enabled = false;
         }
         
-        public override void Attack(bool isFire = false)
+        public override void WeaponUseUpdate(MyInputManager input)
         {
-            if (isFire)
+            if (input.IsFire)
             {
                 if (_state == CrowbarState.Idle)
                 {
                     _state = CrowbarState.Attacking;
-                    weaponAnimator.SetTrigger("Attack");
+                    WeaponAnimator.SetTrigger("Attack");
                 }
             }
             else
@@ -63,7 +64,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         {
             if (other.TryGetComponent(out IAttackable attackable))
             {
-                attackable.Damage();
+                attackable.Damage(weaponData.WeaponDamage);
             }
         }
     }
