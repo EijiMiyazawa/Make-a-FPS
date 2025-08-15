@@ -1,32 +1,55 @@
 using System;
+using System.Diagnostics;
 using foRCreative.App.MakeAFps.Project.Scripts.Inputs;
 using foRCreative.App.MakeAFps.Project.Scripts.Weapons;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using Debug = UnityEngine.Debug;
 
 namespace foRCreative.App.MakeAFps.Project.Scripts
 {
     public class WeaponController : MonoBehaviour
     {
         [SerializeField] MyInputManager inputManager;
-        [SerializeField] private Weapon currentWeapon;
 
         [SerializeField] private RigBuilder rigBuilder;
-        
-        [SerializeField] private Transform leftArmTarget;
-        [SerializeField] private Transform rightArmTarget;
-        [SerializeField] private TwoBoneIKConstraint  leftArmIKConstraint;
+
+        [SerializeField] private TwoBoneIKConstraint leftArmIKConstraint;
         [SerializeField] private TwoBoneIKConstraint rightArmIKConstraint;
         
+        [Header("Weapons")]
+        [SerializeField] private Weapon[] equippedWeapons;
+        [SerializeField] private Weapon usingWeapon;
+        
         private void Start()
+        {
+            
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (inputManager.IsWeaponSwitchDown)
+            {
+                Debug.Log("Switch Down");
+            }
+            usingWeapon.WeaponUseUpdate(inputManager);
+        }
+
+        private void SwitchingWeapons()
+        {
+            
+        }
+
+        private void IKTargeting()
         {
             //  Constraintのデータを取得
             TwoBoneIKConstraintData leftArmData = leftArmIKConstraint.data;
             TwoBoneIKConstraintData rightArmData = rightArmIKConstraint.data;
             
             //  ターゲットを変更
-            leftArmData.target = leftArmTarget;
-            rightArmData.target = rightArmTarget;
+            leftArmData.target = usingWeapon.leftHandIKTarget;
+            rightArmData.target = usingWeapon.rightHandIKTarget;
             
             //  変更したターゲットを反映
             leftArmIKConstraint.data = leftArmData;
@@ -34,12 +57,6 @@ namespace foRCreative.App.MakeAFps.Project.Scripts
             
             //  rigBuilderのリビルド
             rigBuilder.Build();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            currentWeapon.WeaponUseUpdate(inputManager);
         }
     }
 }

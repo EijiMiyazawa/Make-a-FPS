@@ -740,6 +740,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: bcc4b466a90da1140997a2b4ded7ed3b, type: 2}
+  leftHandIKTarget: {fileID: 0}
+  rightHandIKTarget: {fileID: 0}
 --- !u!65 &345581233
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1573,6 +1575,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: 88ccdbcfc7e66514f9b2341ec3ffcdf5, type: 2}
+  leftHandIKTarget: {fileID: 0}
+  rightHandIKTarget: {fileID: 0}
   bulletPrefab: {fileID: 4056843417991162613, guid: f54a549fdb164e54586b6ec426bbbd9e, type: 3}
   bulletSpeed: 100
   muzzle: {fileID: 510043003}
@@ -4280,12 +4284,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 627003621}
-  currentWeapon: {fileID: 345581230}
   rigBuilder: {fileID: 1021543220}
-  leftArmTarget: {fileID: 1883998490}
-  rightArmTarget: {fileID: 996362931}
   leftArmIKConstraint: {fileID: 382294403}
   rightArmIKConstraint: {fileID: 609890693}
+  equippedWeapons: []
+  usingWeapon: {fileID: 345581230}
 --- !u!1001 &1786626714
 PrefabInstance:
   m_ObjectHideFlags: 0
