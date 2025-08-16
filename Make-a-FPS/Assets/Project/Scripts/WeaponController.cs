@@ -1,10 +1,7 @@
-using System;
-using System.Diagnostics;
 using foRCreative.App.MakeAFps.Project.Scripts.Inputs;
 using foRCreative.App.MakeAFps.Project.Scripts.Weapons;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using Debug = UnityEngine.Debug;
 
 namespace foRCreative.App.MakeAFps.Project.Scripts
 {
@@ -20,10 +17,16 @@ namespace foRCreative.App.MakeAFps.Project.Scripts
         [Header("Weapons")]
         [SerializeField] private Weapon[] equippedWeapons;
         [SerializeField] private Weapon usingWeapon;
+
+        private int _index;
         
         private void Start()
         {
-            
+            //  配列の最初にある武器を持つ
+            _index = 0;
+            usingWeapon =  equippedWeapons[_index];
+            usingWeapon.gameObject.SetActive(true);
+            IKTargeting();
         }
 
         // Update is called once per frame
@@ -31,14 +34,28 @@ namespace foRCreative.App.MakeAFps.Project.Scripts
         {
             if (inputManager.IsWeaponSwitchDown)
             {
-                Debug.Log("Switch Down");
+                SwitchingWeapons();
             }
             usingWeapon.WeaponUseUpdate(inputManager);
         }
 
         private void SwitchingWeapons()
         {
+            //  現在使用しているWeaponを無効化
+            usingWeapon.gameObject.SetActive(false);
             
+            //  次のWeaponを選択
+            _index++;
+            if (_index >= equippedWeapons.Length)
+            {
+                _index = 0;
+            }
+            
+            usingWeapon =  equippedWeapons[_index];
+            
+            //  選択したWeaponを有効化
+            usingWeapon.gameObject.SetActive(true);
+            IKTargeting();
         }
 
         private void IKTargeting()
