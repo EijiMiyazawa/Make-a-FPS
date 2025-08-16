@@ -10,9 +10,12 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
     {
         [Header("Weapon Data")]
         [SerializeField] protected WeaponData weaponData;
+        [Header("IK Constraint Target")]
+        public Transform leftHandIKTarget;
+        public Transform rightHandIKTarget;
         
         /// <summary>
-        /// 読み取り専用(start時自動割り当て)
+        /// 武器のAnimator
         /// </summary>
         protected Animator WeaponAnimator;
 

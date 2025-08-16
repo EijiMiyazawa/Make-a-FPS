@@ -9,70 +9,68 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
     {
         private PlayerInput _playerInput;
         
-        //  Moveの入力用
-        private Vector2 _moveInput;
-        
-        //  Lookの入力用
-        private Vector2 _lookInput;
-        
-        //  Fireの入力用
-        private bool _isFire;
-        //  FireDownの入力用
-        private bool _isFireDown;
         //  Fireの前フレームの入力バッファー
         private bool _isFireBefore;
         
-        //  現在のReloadの入力
+        //  現在のReloadの入力--------
         private bool _isReload;
         //  前フレームのReloadの入力
         private bool _isReloadBefore;
-        //  ReloadDownの入力用
-        private bool _isReloadDown;
+
+        //  現在のWeaponSwitchの入力-------
+        private bool _isWeaponSwitch;
+        //  前フレームのSwitchWeaponの入力
+        private bool _isWeaponSwitchBefore;
         
         /// <summary>
         /// 読み取り専用 Moveの入力を返す
         /// </summary>
-        public Vector2 MoveInput => _moveInput;
-        
+        public Vector2 MoveInput { get; private set; }
+
         /// <summary>
         /// 読み取り専用 Lookの入力を返す
         /// </summary>
-        public Vector2 LookInput => _lookInput;
-        
+        public Vector2 LookInput { get; private set; }
+
         /// <summary>
         /// 読み取り専用 Fireが押されているときにTrueを返す
         /// </summary>
-        public bool IsFire => _isFire;
-        
+        public bool IsFire { get; private set; }
+
         /// <summary>
         /// 読み取り専用 Fireが押された瞬間にTrueを返す
         /// </summary>
-        public bool IsFireDown => _isFireDown;
-        
+        public bool IsFireDown { get; private set; }
+
         /// <summary>
         /// 読み取り専用 Reloadボタン押下された瞬間にTrueを返す
         /// </summary>
-        public bool IsReloadDown => _isReloadDown;
+        public bool IsReloadDown { get; private set; }
+        
+        public bool IsWeaponSwitchDown { get; private set; }
 
         private void Awake()
         {
             _playerInput = GetComponent<PlayerInput>();
             _isFireBefore = false;
             _isReloadBefore = false;
+            _isWeaponSwitchBefore = false;
         }
 
         private void Update()
         {
             //  前フレームからTrueに変化した場合ボタンを押下した瞬間を検出
-            _isFireDown = (_isFireBefore == false && _isFire == true);
-            _isReloadDown = (_isReloadBefore == false && _isReload == true);
+            IsFireDown = (_isFireBefore == false && IsFire == true);
+            IsReloadDown = (_isReloadBefore == false && _isReload == true);
+            IsWeaponSwitchDown = (_isWeaponSwitchBefore == false && _isWeaponSwitch == true);
         }
 
         private void LateUpdate()
         {
             //  前フレームの情報を維持
-            _isFireBefore = _isFire;
+            _isFireBefore = IsFire;
             _isReloadBefore = _isReload;
+            _isWeaponSwitchBefore = _isWeaponSwitch;
         }
 
         private void OnEnable()
@@ -91,6 +89,9 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
             //  Reload
             _playerInput.actions["Reload"].performed += OnReload;
             _playerInput.actions["Reload"].canceled += OnReload;
+            //  WeaponSwitch
+            _playerInput.actions["WeaponSwitch"].performed += OnWeaponSwitch;
+            _playerInput.actions["WeaponSwitch"].canceled += OnWeaponSwitch;
             
             //  カーソルロック
             Cursor.lockState = CursorLockMode.Locked;
@@ -113,6 +114,9 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
             //  Reload
             _playerInput.actions["Reload"].performed -= OnReload;
             _playerInput.actions["Reload"].canceled -= OnReload;
+            //  WeaponSwitch
+            _playerInput.actions["WeaponSwitch"].performed -= OnWeaponSwitch;
+            _playerInput.actions["WeaponSwitch"].canceled -= OnWeaponSwitch;
             
             //  カーソルロック解除
             Cursor.lockState = CursorLockMode.None;
@@ -123,10 +127,10 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
             switch (obj.phase)
             {
                 case InputActionPhase.Performed:
-                    _moveInput = obj.ReadValue<Vector2>();
+                    MoveInput = obj.ReadValue<Vector2>();
                     break;
                 case InputActionPhase.Canceled:
-                    _moveInput = Vector2.zero;
+                    MoveInput = Vector2.zero;
                     break;
             }
         }
@@ -136,10 +140,10 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
             switch (obj.phase)
             {
                 case InputActionPhase.Performed:
-                    _lookInput = obj.ReadValue<Vector2>();
+                    LookInput = obj.ReadValue<Vector2>();
                     break;
                 case InputActionPhase.Canceled:
-                    _lookInput = Vector2.zero;
+                    LookInput = Vector2.zero;
                     break;
             }
         }
@@ -149,10 +153,10 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
             switch (obj.phase)
             {
                 case InputActionPhase.Performed:
-                    _isFire = true;
+                    IsFire = true;
                     break;
                 case InputActionPhase.Canceled:
-                    _isFire = false;
+                    IsFire = false;
                     break;
             }
         }
@@ -168,6 +172,11 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Inputs
                     _isReload = false;
                     break;
             }
+        }
+
+        private void OnWeaponSwitch(InputAction.CallbackContext obj)
+        {
+            _isWeaponSwitch = (obj.phase == InputActionPhase.Performed);
         }
     }
 }
