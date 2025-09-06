@@ -1,6 +1,7 @@
 using foRCreative.App.MakeAFps.Project.Scripts.Inputs;
 using foRCreative.App.MakeAFps.Project.Scripts.Interfaces;
 using foRCreative.App.MakeAFps.Project.Scripts.SFX;
+using foRCreative.App.MakeAFps.Project.Scripts.VFX;
 using UnityEngine;
 
 namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
@@ -16,6 +17,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         private CrowbarState _state;
         private Collider _attackCollider;
         [SerializeField] private SePlayer sePlayer;
+        [SerializeField] private EffectPlayer  effectPlayer;
 
         private void Start()
         {
@@ -33,7 +35,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
                 {
                     _state = CrowbarState.Attacking;
                     WeaponAnimator.SetTrigger("Attack");
-                    sePlayer.PlayFirstAudioClip();
+                    sePlayer.PlayFirstAudioClip(randomPitch:0.1f);
                 }
             }
             else
@@ -63,7 +65,10 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         /// </summary>
         /// <param name="other">hit情報</param>
         public void CrowbarHit(Collider other)
-        {
+        { 
+            //  ヒットエフェクト
+            effectPlayer.PlayEffect();
+            
             if (other.TryGetComponent(out IAttackable attackable))
             {
                 attackable.Damage(weaponData.WeaponDamage);

@@ -1,6 +1,7 @@
 using System.Collections;
 using foRCreative.App.MakeAFps.Project.Scripts.Inputs;
 using foRCreative.App.MakeAFps.Project.Scripts.SFX;
+using foRCreative.App.MakeAFps.Project.Scripts.VFX;
 using foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObjectScript;
 using UnityEngine;
 
@@ -53,6 +54,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
 
         [Header("FX系設定")]
         [SerializeField] private SePlayer sePlayer;
+        [SerializeField] private EffectPlayer muzzleFlashEffect;
         
         //  現在の状態
         private HandGunState _state;
@@ -137,8 +139,9 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
                 rb.AddForce(muzzle.forward * bulletSpeed, ForceMode.Impulse);
             }
             
-            //  銃声
+            //  銃のエフェクト
             sePlayer.PlaySe("拳銃を撃つ");
+            muzzleFlashEffect.PlayEffect();
             
             //  攻撃アニメーションを再生
             WeaponAnimator.SetTrigger("Attack");
