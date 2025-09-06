@@ -1,4 +1,3 @@
-using UnityEngine;
 
 namespace foRCreative.App.MakeAFps.Project.Scripts.Interfaces
 {
