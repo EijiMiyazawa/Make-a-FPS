@@ -1,7 +1,7 @@
 using foRCreative.App.MakeAFps.Project.Scripts.Inputs;
 using foRCreative.App.MakeAFps.Project.Scripts.Interfaces;
+using foRCreative.App.MakeAFps.Project.Scripts.SFX;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
 {
@@ -15,6 +15,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
     {
         private CrowbarState _state;
         private Collider _attackCollider;
+        [SerializeField] private SePlayer sePlayer;
 
         private void Start()
         {
@@ -32,6 +33,7 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
                 {
                     _state = CrowbarState.Attacking;
                     WeaponAnimator.SetTrigger("Attack");
+                    sePlayer.PlayFirstAudioClip();
                 }
             }
             else
