@@ -7,26 +7,14 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Enemy
         [SerializeField] private GameObject ragdollPrefab;
         [SerializeField] private Transform original;
         
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        public GameObject SpawnRagdoll()
+       public GameObject SpawnRagdoll()
         {
-            GameObject ragdoll = Instantiate(ragdollPrefab, original.position, original.rotation);
-            CloneTransforms(original, ragdoll.transform);
-            return ragdoll;
-        }
-
-        private void CloneTransforms(Transform root, Transform clone)
-        {
-            foreach (Transform child in root)
+            GameObject ragdoll = Instantiate(ragdollPrefab, transform.position, transform.rotation);
+            if (ragdoll.TryGetComponent(out RagdollSetUpper ragdollSetUpper))
             {
-                Transform cloneChild = child.Find(child.name);
-                if (cloneChild != null)
-                {
-                    clone.position = cloneChild.position;
-                    clone.rotation = cloneChild.rotation;
-                    CloneTransforms(child, cloneChild);
-                }
+                ragdollSetUpper.SetupRagdoll(original);
             }
+            return ragdoll;
         }
     }
 }
