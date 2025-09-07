@@ -1,5 +1,7 @@
 using System.Collections;
 using foRCreative.App.MakeAFps.Project.Scripts.Inputs;
+using foRCreative.App.MakeAFps.Project.Scripts.SFX;
+using foRCreative.App.MakeAFps.Project.Scripts.VFX;
 using foRCreative.App.MakeAFps.Project.Scripts.Weapons.ScriptableObjectScript;
 using UnityEngine;
 
@@ -49,6 +51,10 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
 
         [Header("リロード時間")] 
         public int reloadTime = 10;
+
+        [Header("FX系設定")]
+        [SerializeField] private SePlayer sePlayer;
+        [SerializeField] private EffectPlayer muzzleFlashEffect;
         
         //  現在の状態
         private HandGunState _state;
@@ -99,6 +105,11 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
                     
                     break;
                 case HandGunState.NoAmmo:
+                    if (input.IsFireDown)
+                    {
+                        sePlayer.PlaySe("拳銃の弾切れ");
+                    }
+                    
                     //  リロード可能
                     if (input.IsReloadDown)
                     {
@@ -128,6 +139,10 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
                 rb.AddForce(muzzle.forward * bulletSpeed, ForceMode.Impulse);
             }
             
+            //  銃のエフェクト
+            sePlayer.PlaySe("拳銃を撃つ");
+            muzzleFlashEffect.PlayEffect();
+            
             //  攻撃アニメーションを再生
             WeaponAnimator.SetTrigger("Attack");
             
@@ -148,9 +163,13 @@ namespace foRCreative.App.MakeAFps.Project.Scripts.Weapons
         {
             _state = HandGunState.Reloading;
             WeaponAnimator.SetTrigger("Reload");
+            //  リロード音
+            sePlayer.PlaySe("弾倉に弾を込める");
+            
             yield return _reloadWaitSeconds;
             
             //  完了後にマガジンを満杯にて射撃準備完了
+            sePlayer.PlaySe("拳銃をチャッと構える");
             magazine = maxAmmo;
             _state = HandGunState.Idle;
         }
