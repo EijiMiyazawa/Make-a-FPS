@@ -1,4 +1,5 @@
 using foRCreative.App.MakeAFps.Project.Scripts.Inputs;
+using foRCreative.App.MakeAFps.Project.Scripts.UI;
 using foRCreative.App.MakeAFps.Project.Scripts.Weapons;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -17,6 +18,9 @@ namespace foRCreative.App.MakeAFps.Project.Scripts
         [Header("Weapons")]
         [SerializeField] private Weapon[] equippedWeapons;
         [SerializeField] private Weapon usingWeapon;
+
+        [Header("UI")]
+        [SerializeField] private BulletCounter  bulletCounterUI;
 
         private int _index;
         
@@ -56,6 +60,9 @@ namespace foRCreative.App.MakeAFps.Project.Scripts
             //  選択したWeaponを有効化
             usingWeapon.gameObject.SetActive(true);
             IKTargeting();
+            
+            //  UIに現在の武器情報を伝える
+            bulletCounterUI.CurrentWeapon = usingWeapon;
         }
 
         private void IKTargeting()
